@@ -205,6 +205,7 @@ function InsightIcon({ severity }: { severity: "info" | "warning" | "critical" }
 
 export default function DeviceDetailPage() {
   const params = useParams();
+  const siteId = params.siteId as string;
   const id = params.id as string;
   const device = devices.find((d) => d.id === id);
 
@@ -214,7 +215,7 @@ export default function DeviceDetailPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-2">Device Not Found</h1>
           <p className="text-slate-500 mb-6 text-sm">No device matches ID &quot;{id}&quot;</p>
-          <Link href="/devices" className="text-carbon-400 hover:text-carbon-300 text-sm underline underline-offset-4">
+          <Link href={`/site/${siteId}/devices`} className="text-carbon-400 hover:text-carbon-300 text-sm underline underline-offset-4">
             Back to Devices
           </Link>
         </div>
@@ -276,7 +277,7 @@ export default function DeviceDetailPage() {
         <div className="px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link
-              href="/devices"
+              href={`/site/${siteId}/devices`}
               className="w-9 h-9 rounded-lg bg-navy-850 border border-slate-800/50 flex items-center justify-center hover:border-carbon-500/30 transition-colors"
             >
               <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

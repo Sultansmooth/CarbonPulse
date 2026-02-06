@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { getSiteById } from "@/lib/sites-data";
 
 const navItems = [
   {
     label: "Dashboard",
-    href: "/",
+    href: "",
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
@@ -106,8 +107,10 @@ const navItems = [
   },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ siteId }: { siteId: string }) {
   const pathname = usePathname();
+  const basePath = `/site/${siteId}`;
+  const site = getSiteById(siteId);
 
   return (
     <aside className="w-64 bg-navy-950 border-r border-slate-800/50 flex flex-col h-full">
@@ -121,19 +124,31 @@ export default function Sidebar() {
           </div>
           <div>
             <h1 className="text-lg font-bold text-white tracking-tight">Carbon Pulse</h1>
-            <p className="text-[10px] text-carbon-400 uppercase tracking-widest">Network Suite</p>
+            <p className="text-[10px] text-carbon-400 uppercase tracking-widest">{site?.name || "Network Suite"}</p>
           </div>
         </div>
+        <Link
+          href="/"
+          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-carbon-400 mt-3 transition-colors"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          All Sites
+        </Link>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 py-4 px-3 space-y-1">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
+          const fullHref = `${basePath}${item.href}`;
+          const isActive = item.href === ""
+            ? pathname === basePath
+            : pathname.startsWith(fullHref);
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={fullHref}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isActive
                   ? "bg-carbon-500/10 text-carbon-400 border border-carbon-500/20"

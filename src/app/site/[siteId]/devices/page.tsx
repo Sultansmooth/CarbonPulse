@@ -3,6 +3,7 @@
 import { devices, clientDevices } from "@/lib/mock-data";
 import type { DeviceRole, ClientDeviceType } from "@/lib/mock-data";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -263,6 +264,8 @@ function RssiIndicator({ rssi }: { rssi: number }) {
 }
 
 export default function DevicesPage() {
+  const params = useParams();
+  const siteId = params.siteId as string;
   const [tab, setTab] = useState<PageTab>("all");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<FilterStatus>("all");
@@ -391,7 +394,7 @@ export default function DevicesPage() {
             </h2>}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
               {filteredInfra.map((device) => (
-                <Link href={`/devices/${device.id}`} key={device.id} className="bg-navy-850 rounded-xl border border-slate-800/50 p-5 card-glow hover:border-slate-700/50 transition-all cursor-pointer group">
+                <Link href={`/site/${siteId}/devices/${device.id}`} key={device.id} className="bg-navy-850 rounded-xl border border-slate-800/50 p-5 card-glow hover:border-slate-700/50 transition-all cursor-pointer group">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="relative w-12 h-12 rounded-lg bg-navy-900/60 border border-slate-800/30 flex items-center justify-center overflow-hidden group-hover:border-slate-700/50 transition-colors">
@@ -496,7 +499,7 @@ export default function DevicesPage() {
                         <td className="px-4 py-3 text-[10px] text-slate-400 font-mono">{cd.mac}</td>
                         <td className="px-4 py-3">
                           {ap ? (
-                            <Link href={`/devices/${ap.id}`} className="text-xs text-carbon-400 hover:text-carbon-300">{ap.name}</Link>
+                            <Link href={`/site/${siteId}/devices/${ap.id}`} className="text-xs text-carbon-400 hover:text-carbon-300">{ap.name}</Link>
                           ) : (
                             <span className="text-xs text-slate-500">Unknown</span>
                           )}
